@@ -11,7 +11,7 @@ app.use(cors());
 app.use("/", router);
 app.use("/",coustomerRouter);
 
-const port = 5000;
+const port = process.env.PORT || 5000;
 mongoose.set("strictQuery", true);
 mongoose
   .connect(process.env.DATA_URL)
