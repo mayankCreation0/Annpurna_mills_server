@@ -5,11 +5,13 @@ const coustomerSchema = new mongoose.Schema(
     Gender: { type: "string", required: true },
     Address: { type: "string", required: true },
     Amount: { type: "Number", required: true },
-    Rate: { type: "Number", required: true },
-    Category: { type: "string", required: true},
+    Rate: { type: "String", required: true },
+    Category: { type: "string", required: true },
+    Weight: { type: "String", required: true},
+    Status: { type: "string", required: true },
     date: { type: Date, unique: true },
     PhoneNumber: { type: "Number" },
-    Remarks: { type: "string"}
+    Remarks: { type: "string" },
   },
   {
     timestamps: true,
