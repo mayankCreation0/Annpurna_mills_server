@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
 const coustomerSchema = new mongoose.Schema(
   {
-    Name: { type: "string", required: true },
-    Gender: { type: "string", required: true },
-    Address: { type: "string", required: true },
-    Amount: { type: "Number", required: true },
-    Rate: { type: "String", required: true },
-    Category: { type: "string", required: true },
-    Weight: { type: "String", required: true},
-    Status: { type: "string", required: true },
+    Name: { type: String, required: true },
+    Gender: { type: String, required: true },
+    Address: { type: String, required: true },
+    Amount: { type: Number, required: true },
+    Rate: { type: String, required: true },
+    Category: { type: String, required: true },
+    Weight: { type: String, required: true },
+    Status: { type: String, required: true },
     date: { type: Date, unique: true },
-    PhoneNumber: { type: "Number" },
-    Remarks: { type: "string" },
+    PhoneNumber: { type: Number },
+    Remarks: { type: String },
   },
   {
     timestamps: true,

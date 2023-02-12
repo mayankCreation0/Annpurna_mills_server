@@ -9,16 +9,17 @@ const createCoustomer = async (req, res) => {
     res.status(500).send(err);
   }
 };
-const loggedin = async(req,res)=>{
-  try{
-    if(req.userid){
+const loggedin = async (req, res) => {
+  try {
+    if (req.userid) {
       return res.status(201).json(req.userid);
-    }
-    else{
+    } else {
       res.status(404).send("User not Loggedin");
     }
-  }catch(err){console.log(err)}
-}
+  } catch (err) {
+    console.log(err);
+  }
+};
 const GetCoustomer = async (req, res) => {
   try {
     let filter = {};
@@ -53,34 +54,60 @@ const GetCoustomer = async (req, res) => {
       filter.updatedAt = { $eq: req.query.updatedAt };
     }
     let sort = {};
+
     if (req.query.sortBy) {
-      let parts = req.query.sortBy.split(":");
-      sort[parts[0]] = parts[1] === "desc" ? -1 : 1;
+      const [field, order] = req.query.sortBy.split(":");
+      sort[field] = order === "desc" ? -1 : 1;
     }
-    let options = {};
-    if (req.query.range) {
-      let parts = req.query.range.split(":");
-      options.skip = parseInt(parts[0]);
-      options.limit = parseInt(parts[1]) - options.skip;
-    }
+    let page = parseInt(req.query.page) || 1;
+    let limit = parseInt(req.query.limit) || 10;
+    let options = {
+      limit: limit,
+      skip: (page - 1) * limit,
+    };
     let coustomers = await Coustomer.find(filter, null, options).sort(sort);
-    res.status(200).json(coustomers);
+    let totalDocuments = await Coustomer.countDocuments(filter);
+    let totalPages = Math.ceil(totalDocuments / limit);
+    res.status(200).json({
+      data: coustomers,
+      totalPages: totalPages,
+    });
   } catch (err) {
+    res.status(502);
     console.log(err);
   }
 };
 const GetCoustomerById = async (req, res) => {
   try {
-    const coustomer = await Coustomer.findById(req.params.id);
-    if (coustomer) {
-      return res.status(201).json(coustomer);
+    const id = req.params.id;
+    console.log(id);
+    let coustomer;
+    if (!isNaN(id)) {
+      coustomer = await Coustomer.find({
+        $or: [
+          { "id": id },
+          { "Amount": id },
+        ]
+      });
     } else {
-      console.log("User not found");
+      coustomer = await Coustomer.find({
+        $or: [
+          { "Name": { $regex: req.params.id, $options: "i" } },
+          { "Address": { $regex: req.params.id, $options: "i" } },
+          { "Category": { $regex: req.params.id, $options: "i" } },
+          {"Remarks":{$regex: req.params.id, $options: "i" }},
+          {"Weight": { $regex: req.params.id, $options:"i"}},
+          // { "_id": { $eq: req.params.id }},
+        ]
+      });
     }
+    return res.status(200).send(coustomer);
   } catch (err) {
+    res.status(500).send(err);
     console.log(err);
   }
-};
+}
+
 const UpdateCoustomer = async (req, res) => {
   try {
     const data = await Coustomer.findByIdAndUpdate(req.params.id, req.body, {
@@ -109,5 +136,5 @@ module.exports = {
   UpdateCoustomer,
   DeleteCoustomer,
   GetCoustomerById,
-  loggedin
+  loggedin,
 };
