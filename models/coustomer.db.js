@@ -5,7 +5,7 @@ const coustomerSchema = new mongoose.Schema(
     Gender: { type: String, required: true },
     Address: { type: String, required: true },
     Amount: { type: Number, required: true },
-    Rate: { type: String, required: true },
+    Rate: { type: Number, required: true },
     Category: { type: String, required: true },
     Weight: { type: String, required: true },
     Status: { type: String, required: true },
