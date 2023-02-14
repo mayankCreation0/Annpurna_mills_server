@@ -56,8 +56,12 @@ const GetCoustomer = async (req, res) => {
     let sort = {};
 
     if (req.query.sortBy) {
-      const [field, order] = req.query.sortBy.split(":");
-      sort[field] = order === "desc" ? -1 : 1;
+      let [field, order] = req.query.sortBy.split(":");
+      if (field === "createdAt" || field === "updatedAt" ) {
+        sort[field] = order === "desc" ? -1 : 1;
+      } else {
+        sort[field] = order === "desc" ? -1 : 1;
+      }
     }
     let page = parseInt(req.query.page) || 1;
     let limit = parseInt(req.query.limit) || 10;
@@ -77,7 +81,7 @@ const GetCoustomer = async (req, res) => {
     console.log(err);
   }
 };
-const GetCoustomerById = async (req, res) => {
+const SearchCoustomerById = async (req, res) => {
   try {
     const id = req.params.id;
     console.log(id);
@@ -85,7 +89,7 @@ const GetCoustomerById = async (req, res) => {
     if (!isNaN(id)) {
       coustomer = await Coustomer.find({
         $or: [
-          { "id": id },
+          // { "id": id },
           { "Amount": id },
         ]
       });
@@ -95,8 +99,8 @@ const GetCoustomerById = async (req, res) => {
           { "Name": { $regex: req.params.id, $options: "i" } },
           { "Address": { $regex: req.params.id, $options: "i" } },
           { "Category": { $regex: req.params.id, $options: "i" } },
-          {"Remarks":{$regex: req.params.id, $options: "i" }},
-          {"Weight": { $regex: req.params.id, $options:"i"}},
+          { "Remarks": { $regex: req.params.id, $options: "i" } },
+          { "Weight": { $regex: req.params.id, $options: "i" } },
           // { "_id": { $eq: req.params.id }},
         ]
       });
@@ -107,6 +111,15 @@ const GetCoustomerById = async (req, res) => {
     console.log(err);
   }
 }
+const GetCoustomerById = async (req, res) => {
+  try {
+    const coustomer = await Coustomer.find({ "_id": { $eq: req.params.id } });
+    return res.status(200).send(coustomer)
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+}
+
 
 const UpdateCoustomer = async (req, res) => {
   try {
@@ -135,6 +148,6 @@ module.exports = {
   GetCoustomer,
   UpdateCoustomer,
   DeleteCoustomer,
-  GetCoustomerById,
-  loggedin,
+  SearchCoustomerById,
+  loggedin, GetCoustomerById
 };
