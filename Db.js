@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+mongoose.set('strictQuery', true)
 require('dotenv').config()
 async function connect() {
 
@@ -7,7 +8,6 @@ async function connect() {
             if (err) {
                 reject(err);
             }
-
             resolve();
         })
     })
