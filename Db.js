@@ -4,7 +4,7 @@ require('dotenv').config()
 async function connect() {
 
     return new Promise((resolve, reject) => {
-        mongoose.connect(process.env.DATA_URl, (err) => {
+        mongoose.connect(process.env.DATA_URL, (err) => {
             if (err) {
                 reject(err);
             }
