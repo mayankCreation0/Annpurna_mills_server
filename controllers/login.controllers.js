@@ -13,15 +13,11 @@ const signup = async (req, res) => {
       return res.status(400).json("User Already Registered");
     }
     const hashedPassword = await bcrypt.hash(password, 11);
-    const result = await models.create({
+    await models.create({
       Username: Username,
       password: hashedPassword,
     });
-    const token = jwt.sign(
-      { email: result.email, id: result._id },
-      process.env.SECRET_KEY
-    );
-    res.status(201).json({ user: result, token: token });
+    res.status(201).json("signup successful");
   } catch (err) {
     console.log(err);
     res.status(500).send({ message: "something went wrong" });

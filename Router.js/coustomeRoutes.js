@@ -8,7 +8,7 @@ coustomerRouter.get("/coustomer/loggedin", auth, loggedin);
 coustomerRouter.get("/coustomer/:id", auth, SearchCoustomerById);
 coustomerRouter.get("/coustomer/find/:id",auth,GetCoustomerById)
 coustomerRouter.post("/coustomer", auth, createCoustomer);
-coustomerRouter.patch("/coustomer/:id", auth, UpdateCoustomer);
+coustomerRouter.patch("/coustomer/find/:id", auth, UpdateCoustomer);
 coustomerRouter.delete("/coustomer/:id", auth, DeleteCoustomer);
 
 module.exports = coustomerRouter;
