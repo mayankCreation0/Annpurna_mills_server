@@ -13,7 +13,6 @@ const signup = async (req, res) => {
       return res.status(400).json("User Already Registered");
     }
     const hashedPassword = await bcrypt.hash(password, 11);
-
     const result = await models.create({
       Username: Username,
       password: hashedPassword,
