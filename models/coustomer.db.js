@@ -12,12 +12,6 @@ const customerSchema = new mongoose.Schema(
     date: { type: Date },
     paymentDate: { type: Date, default: new Date },
     paymentAmount: { type: Number, default: 0 },
-    previousPayments: [
-      {
-        amount: { type: Number, default: 0},
-        date: { type: Date, default: new Date},
-      },
-    ],
     PhoneNumber: { type: Number },
     Remarks: { type: String },
   },
