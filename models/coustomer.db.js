@@ -10,16 +10,16 @@ const coustomerSchema = new mongoose.Schema(
     Weight: { type: String },
     Status: { type: String },
     date: { type: Date, default: new Date },
-    paymentDate: { type: Date, default: new Date },
-    paymentAmount: { type: Number},
+    // paymentDate: { type: Date, default: new Date },
+    // paymentAmount: { type: Number},
     PhoneNumber: { type: Number },
     Remarks: { type: String },
-    previousPayments: [
-      {
-        amount: { type: Number },
-        date: { type: Date },
-      },
-    ],
+    // previousPayments: [
+    //   {
+    //     amount: { type: Number },
+    //     date: { type: Date },
+    //   },
+    // ],
   },
   {
     timestamps: true,
