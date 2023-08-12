@@ -12,7 +12,7 @@ const coustomerSchema = new mongoose.Schema(
     date: { type: Date, default: new Date },
     paymentDate: { type: Date, default: new Date },
     paymentAmount: { type: Number},
-    PhoneNumber: { type: Number },
+    PhoneNumber: { type: String },
     Remarks: { type: String },
     previousPayments: [
       {
