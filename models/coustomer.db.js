@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const customerSchema = new mongoose.Schema(
+const coustomerSchema = new mongoose.Schema(
   {
     Name: { type: String, required: true },
     Gender: { type: String, required: true },
@@ -14,9 +14,16 @@ const customerSchema = new mongoose.Schema(
     paymentAmount: { type: Number, default: 0 },
     PhoneNumber: { type: Number },
     Remarks: { type: String },
+    previousPayments: [
+      {
+        amount: { type: Number },
+        date: { type: Date },
+      },
+    ],
   },
   {
     timestamps: true,
   }
 );
+
 module.exports = mongoose.model('Coustomer',coustomerSchema);
