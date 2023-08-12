@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const coustomerSchema = new mongoose.Schema(
+const customerSchema = new mongoose.Schema(
   {
     Name: { type: String, required: true },
     Gender: { type: String, required: true },
@@ -10,8 +10,14 @@ const coustomerSchema = new mongoose.Schema(
     Weight: { type: String, required: true },
     Status: { type: String, required: true },
     date: { type: Date },
-    paymentDate:{type:Date,default: new Date},
-    paymentAmount:{type:Number,default:0},
+    paymentDate: { type: Date, default: new Date },
+    paymentAmount: { type: Number, default: 0 },
+    previousPayments: [
+      {
+        amount: { type: Number, default: 0},
+        date: { type: Date, default: new Date},
+      },
+    ],
     PhoneNumber: { type: Number },
     Remarks: { type: String },
   },
