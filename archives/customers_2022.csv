@@ -1,0 +1,6 @@
+Name,Gender,Address,Amount,Rate,Category,Weight,Status,Date,PhoneNumber,Remarks,PreviousPayments,PaidLoan
+test,female,alwara,1234,2,Silver,2,Completed,Fri Jun 10 2022 05:30:00 GMT+0530 (India Standard Time),,,,"{
+  LoanPaidDate: 2024-07-10T00:00:00.000Z,
+  loanPaidAmount: null,
+  _id: new ObjectId(""668ec29ddbe6379bc1942fa5"")
+}"

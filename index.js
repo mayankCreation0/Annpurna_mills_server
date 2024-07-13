@@ -53,17 +53,58 @@ app.get('/', (req, res) => {
 });
 
 // Function to fetch metal rates
+// const fetchGoldRates = async () => {
+//     try {
+//         const { data } = await axios.get('https://www.creditmantri.com/gold-rate-kolkata/');
+//         const $ = cheerio.load(data);
+
+//         const goldRates = [];
+
+//         $('.gold-card').each((index, element) => {
+//             const rate = $(element).find('.txt-bold.font-size').text().trim();
+//             goldRates.push(rate);
+//         });
+
+//         return goldRates;
+//     } catch (error) {
+//         console.error('Error fetching gold rates:', error);
+//         throw error;
+//     }
+// };
+
 const fetchGoldRates = async () => {
     try {
-        const { data } = await axios.get('https://www.creditmantri.com/gold-rate-kolkata/');
+        const { data } = await axios.get('https://www.hindustantimes.com/gold-prices');
         const $ = cheerio.load(data);
 
-        const goldRates = [];
+        const goldRates = {
+            '22k': {
+                pricePerGram: '',
+                priceChangePerGram: '',
+                isUp: false
+            },
+            '24k': {
+                pricePerGram: '',
+                priceChangePerGram: '',
+                isUp: false
+            }
+        };
 
-        $('.gold-card').each((index, element) => {
-            const rate = $(element).find('.txt-bold.font-size').text().trim();
-            goldRates.push(rate);
-        });
+        const parseGoldRate = (index) => {
+            const goldRateBox = $('.gpBoxHolder .gpBox').eq(index);
+            const price = parseFloat(goldRateBox.find('strong').text().trim().replace(/[₹,]/g, ''));
+            const priceChange = parseFloat(goldRateBox.find('span').text().trim().replace(/[+,]/g, ''));
+            const isUp = goldRateBox.find('span').hasClass('up');
+
+            return {
+                pricePerGram: (price / 10).toFixed(2),
+                priceChangePerGram: (priceChange / 10).toFixed(2),
+                isUp: isUp
+            };
+        };
+
+        goldRates['22k'] = parseGoldRate(1);
+        goldRates['24k'] = parseGoldRate(0);
 
         return goldRates;
     } catch (error) {
@@ -71,7 +112,6 @@ const fetchGoldRates = async () => {
         throw error;
     }
 };
-
 // Function to fetch and parse silver rates
 const fetchSilverRates = async () => {
     try {
