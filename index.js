@@ -7,6 +7,9 @@ const staffAttendanceRoutes = require('./routes/staffAttendanceRoutes');
 const cors = require('cors');
 const cheerio = require('cheerio');
 const axios = require('axios');
+const cloudinary = require('cloudinary').v2;
+const Redis = require('ioredis');
+const deviceRoutes = require('./routes/deviceRoutes');
 
 require("dotenv").config();
 if (process.env.NODE_ENV === "test") {
@@ -19,13 +22,36 @@ if (process.env.NODE_ENV === "test") {
 }
 
 // console.log('MongoDb URI:', process.env.MongoDb); // Log the MongoDB URI to check if it's loaded
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+let redis;
+
+if (process.env.REDIS_URL) {
+    redis = new Redis(process.env.REDIS_URL);
+} else {
+    redis = new Redis({
+        host: process.env.REDIS_HOST || 'localhost',
+        port: process.env.REDIS_PORT || 6379,
+    });
+}
+
+redis.on('error', (err) => console.log('Redis Client Error', err));
 
 const app = express();
+// Make Redis client available to route handlers
+app.use((req, res, next) => {
+    req.redis = redis;
+    next();
+});
+
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors());
 const port = process.env.PORT || 3000;
-
-// Middleware
-app.use(express.json());
 
 // Connect to MongoDB
 const mongoURI = process.env.MongoDb;
@@ -149,6 +175,7 @@ app.get('/api/metal-rates', async (req, res) => {
 
 // Other routes
 app.use('/', authRoutes);
+app.use('/user/device', deviceRoutes);
 app.use('/user', customerRoutes);
 app.use('/staff', staffRoutes);
 app.use('/attendance', staffAttendanceRoutes);
@@ -157,3 +184,4 @@ app.use('/attendance', staffAttendanceRoutes);
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+module.exports = app;
